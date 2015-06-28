@@ -1,20 +1,35 @@
 <?php
-/*
-    TOTP v0.2.1 - a simple TOTP (RFC 6238) class using the SHA1 default
-
-	Copyright by Łukasz Jurczyk, 2017 <zabszk at protonmail dot ch>
-    Copyright by Robin Leffmann, 2014 <djinn at stolendata dot net>
-
-    Original source: https://github.com/stolendata/totp/
-	Modified version: https://github.com/zabszk/totp
-	
-    Licensed under CC BY-NC-SA 4.0 - http://creativecommons.org/licenses/by-nc-sa/4.0/
+/**
+ * TOTP
+ * A simple TOTP (RFC 6238) class using the SHA1 default
+ *
+ * @author      Robin Leffmann <djinn at stolendata dot net>
+ * @author      Łukasz Jurczyk <zabszk at protonmail dot ch>
+ * @copyright   2014 Robin Leffmann
+ * @link        https://github.com/stolendata/totp
+ * @copyright   2017 Łukasz Jurczyk
+ * @link        https://github.com/zabszk/totp
+ * @license     Creative Commons BY-NC-SA 4.0
+ * @link        http://creativecommons.org/licenses/by-nc-sa/4.0
+ *
+ * @since       2014
+ * @edited      $Date$
+ * @version     $Id$
+ *
+ * @category    PHP Class
+ * @package     TOTP 
 */
 
 class TOTP
 {
     private static $base32Map = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ234567';
 
+    /**
+     * Base32 Decode
+     *
+     * @param   string  $in
+     * @return  string
+    */    
     private static function base32Decode( $in )
     {
         $l = strlen( $in );
@@ -31,6 +46,15 @@ class TOTP
         return $out;
     }
 
+    /**
+     * Generate an OTP
+     *
+     * @param   string  $secret
+     * @param   int     $digits
+     * @param   int     $period
+     * @param   int     $offset
+     * @return  array
+    */    
     public static function getOTP( $secret, $digits = 6, $period = 30, $offset = 0 )
     {
         if( strlen($secret) < 16 || strlen($secret) % 8 != 0 )
@@ -49,6 +73,12 @@ class TOTP
         return [ 'otp'=>sprintf("%'0{$digits}u", $otp) ];
     }
 
+    /**
+     * Generate a secret
+     *
+     * @param   int  $length
+     * @return  array
+    */    
     public static function genSecret( $length = 24 )
     {
         if( $length < 16 || $length % 8 !== 0 )
@@ -70,6 +100,16 @@ class TOTP
         return [ 'secret'=>$secret ];
     }
 
+    /**
+     * Generate an OTP URI
+     * 
+     * @param   string  $account
+     * @param   string  $secret
+     * @param   boolean $digits
+     * @param   int     $period
+     * @param   string  $issuer
+     * @return  array
+    */
     public static function genURI( $account, $secret, $digits = null, $period = null, $issuer = null )
     {
         if( empty($account) || empty($secret) )
@@ -87,4 +127,3 @@ class TOTP
                         (empty($issuer) ? '' : "&issuer=$issuer") ];
     }
 }
-?>
