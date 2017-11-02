@@ -2,10 +2,12 @@
 /*
     TOTP v0.2.0 - a simple TOTP (RFC 6238) class using the SHA1 default
 
-    (c) 2014 Robin Leffmann <djinn at stolendata dot net>
+	Copyright by Łukasz Jurczyk, 2017 <zabszk at protonmail dot ch>
+    Copyright by Robin Leffmann, 2014 <djinn at stolendata dot net>
 
-    https://github.com/stolendata/totp/
-
+    Original source: https://github.com/stolendata/totp/
+	Modified version: https://github.com/zabszk/totp
+	
     Licensed under CC BY-NC-SA 4.0 - http://creativecommons.org/licenses/by-nc-sa/4.0/
 */
 
@@ -50,15 +52,20 @@ class TOTP
     {
         if( $length < 16 || $length % 8 != 0 )
             return [ 'err'=>'length must be a multiple of 8, and at least 16' ];
-
+		require_once "lib/random.php";
         while( $length-- )
         {
-            $c = @gettimeofday()['usec'] % 53;
-            while( $c-- )
-                mt_rand();
-            @$secret .= self::$base32Map[mt_rand(0, 31)];
+            try {
+				@$secret .= self::$base32Map[random_int(0, 31)];
+			} catch (TypeError $e) {
+				die("An error has occurred"); 
+			} catch (Error $e) {
+				die("An error has occurred");
+			} catch (Exception $e) {
+				die("Could not generate a secure random int. Is our OS secure?");
+			}
+            
         }
-
         return [ 'secret'=>$secret ];
     }
 
