@@ -19,7 +19,7 @@ The other two functions are meant to be convenient utilities:
 License
 -------
 
-TOTP is released under the Creative Commons BY-NC-SA 4.0 license: http://creativecommons.org/licenses/by-nc-sa/4.0/
+TOTP is released under the Creative Commons BY-NC-SA 4.0 license: https://creativecommons.org/licenses/by-nc-sa/4.0/
 
 Copyright (c) Łukasz Jurczyk, 2017.
 

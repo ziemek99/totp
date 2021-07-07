@@ -10,15 +10,13 @@
  * @copyright   2017 Łukasz Jurczyk
  * @link        https://github.com/zabszk/totp
  * @license     Creative Commons BY-NC-SA 4.0
- * @link        http://creativecommons.org/licenses/by-nc-sa/4.0
+ * @link        https://creativecommons.org/licenses/by-nc-sa/4.0
  *
- * @since       2014
- * @edited      $Date$
  * @version     $Id$
- *
- * @category    PHP Class
- * @package     TOTP 
+ * @package     TOTP
 */
+
+require_once 'lib/random.php';
 
 class TOTP
 {
@@ -29,7 +27,7 @@ class TOTP
      *
      * @param   string  $in
      * @return  string
-    */    
+    */
     private static function base32Decode( $in )
     {
         $l = strlen( $in );
@@ -54,7 +52,7 @@ class TOTP
      * @param   int     $period
      * @param   int     $offset
      * @return  array
-    */    
+    */
     public static function getOTP( $secret, $digits = 6, $period = 30, $offset = 0 )
     {
         if( strlen($secret) < 16 || strlen($secret) % 8 != 0 )
@@ -78,31 +76,31 @@ class TOTP
      *
      * @param   int  $length
      * @return  array
-    */    
+    */
     public static function genSecret( $length = 24 )
     {
         if( $length < 16 || $length % 8 !== 0 )
             return [ 'err'=>'length must be a multiple of 8, and at least 16' ];
-		require_once "lib/random.php";
+
         while( $length-- )
         {
             try {
-				@$secret .= self::$base32Map[random_int(0, 31)];
-			} catch (TypeError $e) {
-				die("An error has occurred"); 
-			} catch (Error $e) {
-				die("An error has occurred");
-			} catch (Exception $e) {
-				die("Could not generate a secure random int. Is our OS secure?");
-			}
-            
+                @$secret .= self::$base32Map[random_int(0, 31)];
+            } catch (TypeError $e) {
+                die("An error has occurred");
+            } catch (Error $e) {
+                die("An error has occurred");
+            } catch (Exception $e) {
+                die("Could not generate a secure random int. Is our OS secure?");
+            }
         }
+
         return [ 'secret'=>$secret ];
     }
 
     /**
      * Generate an OTP URI
-     * 
+     *
      * @param   string  $account
      * @param   string  $secret
      * @param   boolean $digits
